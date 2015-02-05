@@ -67,7 +67,7 @@ function getElementProperties(el) {
   attrs.forEach(function(attrName) {
     if(!el.attributes[attrName]) return
 
-    obj.attributes[attrName] = el.attributes[attrName]
+    obj.attributes[attrName] = el.getAttribute(attrName)
   })
 
   props.forEach(function(propName) {
