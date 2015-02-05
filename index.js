@@ -63,6 +63,13 @@ function createFromElement(el) {
 function getElementProperties(el) {
   var obj = {}
 
+  obj.attributes = {};
+  attrs.forEach(function(attrName) {
+    if(!el.attributes[attrName]) return
+
+    obj.attributes[attrName] = el.attributes[attrName]
+  })
+
   props.forEach(function(propName) {
     if(!el[propName]) return
 
@@ -101,13 +108,13 @@ function getElementProperties(el) {
       obj[propName] = data
       return
     }
-    
+
     // Special case: attributes
-    // some properties are only accessible via .attributes, so 
+    // some properties are only accessible via .attributes, so
     // that's what we'd do, if vdom-create-element could handle this.
     if("attributes" == propName) return
     if("tabIndex" == propName && el.tabIndex === -1) return
-    
+
 
     // default: just copy the property
     obj[propName] = el[propName]
