@@ -63,13 +63,6 @@ function createFromElement(el) {
 function getElementProperties(el) {
   var obj = {}
 
-  obj.attributes = {};
-  attrs.forEach(function(attrName) {
-    if(!el.attributes[attrName]) return
-
-    obj.attributes[attrName] = el.getAttribute(attrName)
-  })
-
   props.forEach(function(propName) {
     if(!el[propName]) return
 
@@ -116,7 +109,8 @@ function getElementProperties(el) {
     if("attributes" == propName) {
       var data = {}
       for (var i = 0; i < el.attributes.length; i++) {
-        data[i] = el.attributes[i]
+        attr = el.attributes[i]
+        data[attr.name] = attr.value
       }
 
       obj[propName] = data
