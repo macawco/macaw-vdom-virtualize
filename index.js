@@ -112,7 +112,17 @@ function getElementProperties(el) {
     // Special case: attributes
     // some properties are only accessible via .attributes, so
     // that's what we'd do, if vdom-create-element could handle this.
-    if("attributes" == propName) return
+    // if("attributes" == propName) return
+    if("attributes" == propName) {
+      var data = {}
+      for (var i = 0; i < el.attributes.length; i++) {
+        data[i] = el.attributes[i]
+      }
+
+      obj[propName] = data
+      return
+    }
+
     if("tabIndex" == propName && el.tabIndex === -1) return
 
 
