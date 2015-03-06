@@ -31,6 +31,7 @@ function createVNode(domNode, key) {
 
   if(domNode.nodeType == 1) return createFromElement(domNode, key)
   if(domNode.nodeType == 3) return createFromTextNode(domNode, key)
+  if(domNode.nodeType == 8) return createFromTextNode(domNode, key)
   return
 }
 
@@ -40,6 +41,10 @@ createVNode.fromHTML = function(html, key) {
   domNode = domNode.children[0] || domNode; // select first node in tree
   return createVNode(domNode, key);
 };
+
+function createFromComment(comment) {
+  return;
+}
 
 function createFromTextNode(tNode) {
   return new VText(tNode.nodeValue)
