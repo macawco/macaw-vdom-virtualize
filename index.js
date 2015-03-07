@@ -31,7 +31,7 @@ function createVNode(domNode, key) {
 
   if(domNode.nodeType == 1) return createFromElement(domNode, key)
   if(domNode.nodeType == 3) return createFromTextNode(domNode, key)
-  if(domNode.nodeType == 8) return createFromTextNode(domNode, key)
+  if(domNode.nodeType == 8) return createFromComment(domNode, key)
   return
 }
 
@@ -42,8 +42,19 @@ createVNode.fromHTML = function(html, key) {
   return createVNode(domNode, key);
 };
 
-function createFromComment(comment) {
-  return;
+function createFromComment(el) {
+  // return new VText(el.nodeValue)
+
+  var tagName = el.tagName
+  , namespace = el.namespaceURI == 'http://www.w3.org/1999/xhtml'? null : el.namespaceURI
+  , properties = getElementProperties(el)
+  , children = []
+
+  for (var i = 0; i < el.childNodes.length; i++) {
+    children.push(createVNode(el.childNodes[i]/*, i*/))
+  }
+
+  return new VNode(tagName, properties, children, null, namespace)
 }
 
 function createFromTextNode(tNode) {
