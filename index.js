@@ -35,9 +35,18 @@ function createVNode(domNode, key) {
   return
 }
 
-createVNode.fromHTML = function(document, html, key) {
+createVNode.fromHTML = function(document, html, key, htmlAttrs) {
   var domNode = document.createElement('html'); // create container
   domNode.innerHTML = html; // browser parses HTML into DOM tree
+
+  // add any html attributes to the new node
+  if (htmlAttrs && htmlAttrs.length > 0) {
+    for (var i = 0; i < htmlAttrs.length; i++) {
+      var attrObj = htmlAttrs[i];
+      domNode.setAttribute(attrObj.attribute, attrObj.value ? attrObj.value : '');
+    }
+  }
+
   return createVNode(domNode, key);
 };
 
