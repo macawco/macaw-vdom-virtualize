@@ -21,8 +21,9 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-var VNode = require("vtree/vnode")
-  , VText = require("vtree/vtext")
+var VNode = require("virtual-dom/vnode/vnode")
+  , VText = require("virtual-dom/vnode/vtext")
+  , VComment = require("virtual-dom/vnode/vcomment")
 
 module.exports = createVNode
 
@@ -50,10 +51,18 @@ createVNode.fromHTML = function(document, html, key, htmlAttrs) {
   return createVNode(domNode, key);
 };
 
+function VirtualComment(data) {
+  this.text = data;
+}
+
+VirtualComment.prototype.version = VNode.version;
+VirtualComment.prototype.type = 'VirtualComment';
+
 function createFromComment(el) {
-  return {
-    data: el.data
-  }
+  return VComment(el.data)
+  // return new VirtualComment(el.data)
+  // return new VText('<!--' + el.data + '-->');
+  // return new VNode('!--' + el.data + '--');
 }
 
 function createFromTextNode(tNode) {
