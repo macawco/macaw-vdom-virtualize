@@ -14,17 +14,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:marcelklehr/vdom-virtualize.git"
+    "url": "git@github.com:macawco/virtual-dom.git"
   },
-  "keywords": [
-    "virtual-dom",
-    "vdom",
-    "virtualize"
-  ],
-  "author": "Marcel Klehr <mklehr@gmx.net>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/marcelklehr/vdom-virtualize/issues"
+    "url": "https://github.com/macawco/virtual-dom.git/issues"
   },
-  "homepage": "https://github.com/marcelklehr/vdom-virtualize"
+  "homepage": "https://github.com/macawco/virtual-dom.git"
 }
