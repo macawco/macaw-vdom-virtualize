@@ -51,18 +51,8 @@ createVNode.fromHTML = function(document, html, key, htmlAttrs) {
   return createVNode(domNode, key);
 };
 
-function VirtualComment(data) {
-  this.data = data;
-}
-
-VirtualComment.prototype.version = VNode.version;
-VirtualComment.prototype.type = 'VirtualComment';
-
 function createFromComment(el) {
-  return VComment(el.data)
-  // return new VirtualComment(el.data)
-  // return new VText('<!--' + el.data + '-->');
-  // return new VNode('!--' + el.data + '--');
+  return new VComment(el.data)
 }
 
 function createFromTextNode(tNode) {
