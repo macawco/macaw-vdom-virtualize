@@ -52,7 +52,7 @@ createVNode.fromHTML = function(document, html, key, htmlAttrs) {
 };
 
 function VirtualComment(data) {
-  this.text = data;
+  this.data = data;
 }
 
 VirtualComment.prototype.version = VNode.version;
