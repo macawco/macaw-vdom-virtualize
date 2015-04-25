@@ -60,7 +60,7 @@ function createFromTextNode(tNode) {
 }
 
 
-function createFromElement(el) {
+function createFromElement(el, key) {
   var tagName = el.tagName
   , namespace = el.namespaceURI == 'http://www.w3.org/1999/xhtml'? null : el.namespaceURI
   , properties = getElementProperties(el)
@@ -70,74 +70,82 @@ function createFromElement(el) {
     children.push(createVNode(el.childNodes[i]/*, i*/))
   }
 
-  return new VNode(tagName, properties, children, null, namespace)
+  return new VNode(tagName, properties, children, key, namespace)
 }
 
 
 function getElementProperties(el) {
-  var obj = {}
+  var obj = {
+    attributes: {}
+  }
 
-  props.forEach(function(propName) {
-    if(!el[propName]) return
+  var attrs = el.attributes;
+  for (var i = 0; i < attrs.length; i++) {
+    var attr = attrs[i];
+    obj.attributes[attr.name] = attr.value;
+  }
 
-    // Special case: style
-    // .style is a DOMStyleDeclaration, thus we need to iterate over all
-    // rules to create a hash of applied css properties.
-    //
-    // You can directly set a specific .style[prop] = value so patching with vdom
-    // is possible.
-    if("style" == propName) {
-      var css = {}
-        , styleProp
-      for(var i=0; i<el.style.length; i++) {
-        styleProp = el.style[i]
-        css[styleProp] = el.style.getPropertyValue(styleProp) // XXX: add support for "!important" via getPropertyPriority()!
-      }
+  // props.forEach(function(propName) {
+  //   if(!el[propName]) return
 
-      obj[propName] = css
-      return
-    }
+  //   // Special case: style
+  //   // .style is a DOMStyleDeclaration, thus we need to iterate over all
+  //   // rules to create a hash of applied css properties.
+  //   //
+  //   // You can directly set a specific .style[prop] = value so patching with vdom
+  //   // is possible.
+  //   if("style" == propName) {
+  //     var css = {}
+  //       , styleProp
+  //     for(var i=0; i<el.style.length; i++) {
+  //       styleProp = el.style[i]
+  //       css[styleProp] = el.style.getPropertyValue(styleProp) // XXX: add support for "!important" via getPropertyPriority()!
+  //     }
 
-    // Special case: dataset
-    // we can iterate over .dataset with a simple for..in loop.
-    // The all-time foo with data-* attribs is the dash-snake to camelCase
-    // conversion.
-    // However, I'm not sure if this is compatible with h()
-    //
-    // .dataset properties are directly accessible as transparent getters/setters, so
-    // patching with vdom is possible.
-    if("dataset" == propName) {
-      var data = {}
-      for(var p in el.dataset) {
-        data[p] = el.dataset[p]
-      }
+  //     obj[propName] = css
+  //     return
+  //   }
 
-      obj[propName] = data
-      return
-    }
+  //   // Special case: dataset
+  //   // we can iterate over .dataset with a simple for..in loop.
+  //   // The all-time foo with data-* attribs is the dash-snake to camelCase
+  //   // conversion.
+  //   // However, I'm not sure if this is compatible with h()
+  //   //
+  //   // .dataset properties are directly accessible as transparent getters/setters, so
+  //   // patching with vdom is possible.
+  //   if("dataset" == propName) {
+  //     var data = {}
+  //     for(var p in el.dataset) {
+  //       data[p] = el.dataset[p]
+  //     }
 
-    // Special case: attributes
-    // some properties are only accessible via .attributes, so
-    // that's what we'd do, if vdom-create-element could handle this.
-    // if("attributes" == propName) return
-    if("attributes" == propName) {
-      var data = {}
-      for (var i = 0; i < el.attributes.length; i++) {
-        attr = el.attributes[i]
-        data[attr.name] = attr.value
-      }
+  //     obj[propName] = data
+  //     return
+  //   }
 
-      obj[propName] = data
-      return
-    }
+  //   // Special case: attributes
+  //   // some properties are only accessible via .attributes, so
+  //   // that's what we'd do, if vdom-create-element could handle this.
+  //   // if("attributes" == propName) return
+  //   if("attributes" == propName) {
+  //     var data = {}
+  //     for (var i = 0; i < el.attributes.length; i++) {
+  //       attr = el.attributes[i]
+  //       data[attr.name] = attr.value
+  //     }
 
-    if("tabIndex" == propName && el.tabIndex === -1) return
+  //     obj[propName] = data
+  //     return
+  //   }
+
+  //   if("tabIndex" == propName && el.tabIndex === -1) return
 
 
-    // default: just copy the property
-    obj[propName] = el[propName]
-    return
-  })
+  //   // default: just copy the property
+  //   obj[propName] = el[propName]
+  //   return
+  // })
 
   return obj
 }
